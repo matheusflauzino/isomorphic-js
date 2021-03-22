@@ -1,36 +1,32 @@
 export default class TableWebComponent {
     render(data) {
-        const htmlTemplate = `<table class="table table-dark">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">First</th>
-            <th scope="col">Last</th>
-            <th scope="col">Handle</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
-          </tr>
-          <tr>
-            <th scope="row">2</th>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>@fat</td>
-          </tr>
-          <tr>
-            <th scope="row">3</th>
-            <td>Larry</td>
-            <td>the Bird</td>
-            <td>@twitter</td>
-          </tr>
-        </tbody>
-      </table>`
+        const htmlTemplate = this.preparData(data)
 
-      document.body.insertAdjacentHTML('afterBegin', htmlTemplate)
+        document.body.insertAdjacentHTML('afterBegin', htmlTemplate)
+    }
+
+    preparData(data) {
+        const [firstItem] = data
+
+        const joinLists = list => list.join('')
+
+        const tHeaders = Object.keys(firstItem)
+                        .map(text => `<th scope="col">${text}</th>`)
+
+        const tBody = data.map(item => Object.values(item))
+                        .map(item => item.map(value=>`<td>${value}</td>`))
+                        .map(tds => `<tr>${joinLists(tds)}</tr>`)
+        const template = `
+        <table class="table table-light">
+            <thead>
+            ${joinLists(tHeaders)}
+            </thead>
+            <tbody>
+            ${joinLists(tBody)}
+            </tbody>
+        </table>
+        `
+
+        return template
     }
 }
